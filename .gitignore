@@ -1,0 +1,17 @@
+# Ignora logs e caches
+*.log
+.cache
+.DS_Store
+
+# --- Backend (sigec-api) ---
+sigec-api/target/
+sigec-api/.idea/
+sigec-api/*.iml
+sigec-api/db/
+sigec-api/.mvn/
+
+# --- Frontend (sigec-ui) ---
+sigec-ui/node_modules/
+sigec-ui/dist/
+sigec-ui/.angular/
+sigec-ui/.vscode/
