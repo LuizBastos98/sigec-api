@@ -1,0 +1,70 @@
+<!-- 1. Container principal para centralizar tudo -->
+<div class="login-page-container">
+
+  <!-- 2. O Card (caixa) do PrimeNG (Removemos o atributo 'header' de texto) -->
+  <p-card [style]="{width: '360px'}">
+
+    <!-- 3. *** MUDANÇA AQUI *** -->
+    <!-- Usamos o 'pTemplate="header"' para inserir a logo no topo do card -->
+    <ng-template pTemplate="header">
+      <img src="assets/logo.png" alt="Logo Sigec" class="login-logo" />
+    </ng-template>
+
+    <!-- 4. O formulário (idêntico ao de antes) -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Campo de E-mail com Ícone -->
+      <div class="form-field">
+        <label for="email">E-mail</label>
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-user"></i>
+          </p-inputGroupAddon>
+          <input
+            pInputText
+            id="email"
+            formControlName="email"
+            placeholder="voce@email.com"
+          />
+        </p-inputGroup>
+        <small *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched)" class="p-error">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">E-mail é obrigatório.</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Formato de e-mail inválido.</span>
+        </small>
+      </div>
+
+      <!-- Campo de Senha com Ícone e "Olho" -->
+      <div class="form-field">
+        <label for="senha">Senha</label>
+        <p-password
+          id="senha"
+          formControlName="senha"
+          placeholder="Sua senha"
+          [toggleMask]="true"
+          [feedback]="false"
+          styleClass="w-full"
+        />
+        <small *ngIf="loginForm.get('senha')?.invalid && (loginForm.get('senha')?.touched)" class="p-error">
+          Senha é obrigatória.
+        </small>
+      </div>
+
+      <!-- Mensagem de Erro Geral (do Backend) -->
+      <p-message
+        *ngIf="loginError"
+        severity="error"
+        [text]="loginError"
+        styleClass="w-full" />
+
+      <!-- Botão de Login (agora estilizado) -->
+      <p-button
+        label="Entrar"
+        icon="pi pi-sign-in"
+        type="submit"
+        [disabled]="loginForm.invalid"
+        styleClass="w-full" />
+
+    </form>
+  </p-card>
+
+</div>

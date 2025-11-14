@@ -1,0 +1,74 @@
+<div class="admin-page">
+
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <h2>Gestão de Estoque (Produtos)</h2>
+    </div>
+    <div class="p-toolbar-group-right">
+      <p-button
+        label="Movimentar Estoque"
+        icon="pi pi-sort-alt"
+        styleClass="p-button-secondary"
+        routerLink="/app/estoque/movimentar" />
+
+      <p-button
+        label="Novo Produto"
+        icon="pi pi-plus"
+        (click)="novoProduto()" />
+    </div>
+  </p-toolbar>
+
+  <div class="card-table">
+    <p-table
+      [value]="produtos"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} produtos"
+      [rowsPerPageOptions]="[10, 20, 50]">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="codigo">Código <p-sortIcon field="codigo"/></th>
+          <th pSortableColumn="nome">Nome <p-sortIcon field="nome"/></th>
+          <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"/></th>
+          <th pSortableColumn="precoUnitario">Preço (R$) <p-sortIcon field="precoUnitario"/></th>
+          <th pSortableColumn="quantidadeEmEstoque">Estoque <p-sortIcon field="quantidadeEmEstoque"/></th>
+          <th>Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-produto>
+        <tr>
+          <td>{{ produto.codigo }}</td>
+          <td>{{ produto.nome }}</td>
+          <td>{{ produto.categoria }}</td>
+          <td>{{ produto.precoUnitario | currency:'BRL' }}</td>
+          <td>{{ produto.quantidadeEmEstoque }}</td>
+          <td>
+            <p-button
+              icon="pi pi-pencil"
+              styleClass="p-button-sm p-button-info"
+              [text]="true"
+              (click)="editarProduto(produto.id)"
+              pTooltip="Editar"/>
+
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-sm p-button-danger"
+              [text]="true"
+              pTooltip="Excluir"
+              (click)="excluirProduto(produto.id, produto.nome)" />
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">Nenhum produto encontrado.</td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+</div>

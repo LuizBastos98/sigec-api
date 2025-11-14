@@ -1,0 +1,127 @@
+/* :host é o próprio componente */
+:host {
+  display: block;
+  height: 100%;
+}
+
+.caixa-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+/* Grid principal que divide a tela em 2 */
+.caixa-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Coluna da esquerda é 2x maior */
+  gap: 1rem;
+  flex-grow: 1; /* Ocupa o resto da altura */
+}
+
+/* Coluna da esquerda (Adicionar + Tabela) */
+.col-carrinho {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Formulário de adicionar item (em linha) */
+.form-add-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto; /* Produto | Quantidade | Botão */
+  gap: 1rem;
+  align-items: flex-end; /* Alinha labels e inputs */
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+  }
+}
+
+/* Garante que os componentes do PrimeNG ocupem 100% */
+:host ::ng-deep {
+  .p-dropdown,
+  .p-inputnumber {
+    width: 100%;
+  }
+  .p-inputnumber input {
+    width: 100%;
+  }
+}
+
+/* Estilo da tabela do carrinho */
+.card-table {
+  flex-grow: 1; /* Ocupa o espaço restante na coluna */
+  padding: 0.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Mensagem de erro (abaixo do form de adicionar) */
+.error-message {
+  width: 100%;
+  margin-top: -0.5rem; /* Puxa para mais perto */
+}
+
+
+/* Coluna da direita (Pagamento) */
+.card-pagamento {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  h3 {
+    margin-top: 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Display de Total e Troco */
+.total-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+}
+
+.valor-total {
+  font-size: 1.8rem;
+  color: #d9534f; /* Vermelho/perigo (a pagar) */
+}
+
+.troco-display {
+  font-size: 1.1rem;
+  color: #5cb85c; /* Verde/sucesso (troco) */
+}
+
+.valor-troco {
+  font-size: 1.6rem;
+}
+
+/* Borda vermelha para inputs inválidos */
+.ng-invalid.ng-dirty {
+  :host ::ng-deep .p-dropdown,
+  :host ::ng-deep .p-inputnumber > .p-inputwrapper {
+    border-color: #e24c4c;
+  }
+}

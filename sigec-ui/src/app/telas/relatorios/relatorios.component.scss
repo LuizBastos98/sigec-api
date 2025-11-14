@@ -1,0 +1,93 @@
+/* Reutiliza o layout padrão da página */
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* O grid para o formulário de filtros */
+.filtro-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
+  gap: 1rem 1.5rem; /* Espaçamento vertical e horizontal */
+  align-items: flex-end; /* Alinha labels e inputs na base */
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Garante que os inputs preencham o espaço */
+    p-calendar,
+    p-inputNumber,
+    p-dropdown {
+      width: 100%;
+    }
+    :host ::ng-deep .p-inputnumber input {
+      width: 100%;
+    }
+  }
+
+  /* Campo de usuário ocupa 3 colunas */
+  .full-width {
+    grid-column: span 3;
+  }
+
+  /* Botões ocupam 1 coluna, alinhados à direita */
+  .filtro-botoes {
+    grid-column: span 1;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+}
+
+/* O grid para os 3 cards de somatório (PDF Módulo 2.5) */
+.somatorios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+  gap: 1rem;
+}
+
+.card-somatorio {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6c757d; /* cinza */
+    text-transform: uppercase;
+  }
+
+  .valor {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #343a40; /* preto suave */
+  }
+
+  /* Cor especial para o total em R$ */
+  .valor.total {
+    color: #28a745; /* verde */
+  }
+}
+
+/* O card da tabela (reutilizado) */
+.card-table {
+  padding: 0.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  flex-grow: 1; /* Ocupa o resto do espaço */
+}

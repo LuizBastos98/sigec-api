@@ -1,0 +1,56 @@
+<p-sidebar [(visible)]="sidebarVisible" [showCloseIcon]="true">
+  <h3>Menu Sigec</h3>
+  <nav class="menu-links">
+    <!-- Links Comuns (ADMIN e OPERADOR) -->
+    <a routerLink="/app/home" (click)="sidebarVisible = false">Home</a>
+    <a routerLink="/app/relatorios" *ngIf="roleUsuario === 'ADMIN' || roleUsuario === 'OPERADOR'" (click)="sidebarVisible = false">Relatórios</a>
+
+    <!-- Links de ADMIN -->
+    <!--
+      *** MUDANÇA TEMPORÁRIA AQUI ***
+      Permite que o OPERADOR também veja o link de Usuários
+    -->
+    <a routerLink="/app/usuarios" *ngIf="roleUsuario === 'ADMIN' || roleUsuario === 'OPERADOR'" (click)="sidebarVisible = false">Usuários</a>
+    <a routerLink="/app/estoque" *ngIf="roleUsuario === 'ADMIN'" (click)="sidebarVisible = false">Gestão de Estoque</a>
+
+    <!-- Links de OPERADOR -->
+    <a routerLink="/app/caixa" *ngIf="roleUsuario === 'OPERADOR'" (click)="sidebarVisible = false">Caixa (Vendas)</a>
+  </nav>
+</p-sidebar>
+
+<div class="main-container">
+
+  <header class="topbar">
+    <div class="topbar-start">
+      <p-button
+        icon="pi pi-bars"
+        [text]="true"
+        (click)="toggleMenu()"
+        aria-label="Toggle Menu"/>
+      <span class="topbar-title">Sigec</span>
+    </div>
+
+    <div class="topbar-end">
+      <span class="user-name">{{ nomeUsuario }}</span>
+      <p-avatar
+        [label]="iniciaisUsuario"
+        shape="circle"
+        styleClass="user-avatar" />
+      <p-button
+        icon="pi pi-sign-out"
+        [text]="true"
+        (click)="logout()"
+        aria-label="Logout"
+        pTooltip="Sair"/>
+    </div>
+  </header>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
+
+<!-- Tags Globais de Mensagem e Confirmação -->
+<p-toast />
+<p-confirmDialog [style]="{width: '450px'}" />

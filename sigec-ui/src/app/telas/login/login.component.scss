@@ -1,0 +1,60 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+:host ::ng-deep {
+
+  .p-card {
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  /* --- *** MUDANÇA AQUI *** --- */
+  /* Estiliza o cabeçalho do card para a logo */
+  .p-card-header {
+    padding: 2rem 1rem 0 1rem; /* Adiciona padding acima da logo */
+  }
+
+  /* Estiliza a nossa logo */
+  .login-logo {
+    display: block;
+    width: 150px; /* Um bom tamanho (ajuste se precisar) */
+    margin: 0 auto; /* Centraliza a imagem */
+  }
+  /* --- FIM DA MUDANÇA --- */
+
+  /* O conteúdo do card (onde o <form> está) */
+  .p-card-content {
+    padding-top: 1.5rem; /* Adiciona um espaço entre a logo e o form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+
+  /* --- Força os componentes a ter 100% de largura --- */
+
+  .p-inputgroup,
+  .p-password,
+  .p-message,
+  .p-button {
+    width: 100%;
+  }
+
+  .p-password input {
+    width: 100%;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

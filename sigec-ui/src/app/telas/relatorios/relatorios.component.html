@@ -1,0 +1,138 @@
+<div class="admin-page">
+
+  <!-- 1. Barra de Título -->
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <h2>Relatório de Vendas</h2>
+    </div>
+  </p-toolbar>
+
+  <!-- 2. Box de Filtros -->
+  <p-fieldset legend="Filtros da Busca" [toggleable]="true">
+    <form [formGroup]="filtroForm" (ngSubmit)="onFiltrar()" class="filtro-form">
+
+      <!-- Linha 1: Datas -->
+      <div class="form-field">
+        <label for="dataInicial">Data Inicial</label>
+        <p-calendar
+          id="dataInicial"
+          formControlName="dataInicial"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true" />
+      </div>
+      <div class="form-field">
+        <label for="dataFinal">Data Final</label>
+        <p-calendar
+          id="dataFinal"
+          formControlName="dataFinal"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true" />
+      </div>
+
+      <!-- Linha 2: Valores -->
+      <div class="form-field">
+        <label for="valorMinimo">Valor Mínimo (R$)</label>
+        <p-inputNumber
+          id="valorMinimo"
+          formControlName="valorMinimo"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR" />
+      </div>
+      <div class="form-field">
+        <label for="valorMaximo">Valor Máximo (R$)</label>
+        <p-inputNumber
+          id="valorMaximo"
+          formControlName="valorMaximo"
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR" />
+      </div>
+
+      <!-- Linha 3: Usuário (Operador) -->
+      <div class="form-field full-width">
+        <label for="usuarioId">Operador (Usuário)</label>
+        <!--
+          *** CORREÇÃO ESTAVA AQUI ***
+          Faltava o ">" no final da tag p-dropdown
+        -->
+        <p-dropdown
+          id="usuarioId"
+          [options]="usuarios"
+          formControlName="usuarioId"
+          placeholder="Filtrar por operador"
+          [showClear]="true"
+          optionLabel="label"
+        />
+      </div>
+
+      <!-- Linha 4: Botões -->
+      <div class="filtro-botoes">
+        <p-button
+          label="Limpar Filtros"
+          icon="pi pi-times"
+          styleClass="p-button-secondary"
+          (click)="onLimpar()"
+          type="button" />
+        <p-button
+          label="Aplicar Filtros"
+          icon="pi pi-filter"
+          type="submit" />
+      </div>
+    </form>
+  </p-fieldset>
+
+  <!-- 3. Box de Somatórios (PDF Módulo 2.5) -->
+  <div class="somatorios-grid">
+    <div class="card-somatorio">
+      <span class="label">VALOR TOTAL VENDIDO</span>
+      <span class="valor total">{{ totalVendasValor | currency:'BRL' }}</span>
+    </div>
+    <div class="card-somatorio">
+      <span class="label">QUANTIDADE DE VENDAS</span>
+      <span class="valor">{{ totalVendasCount }}</span>
+    </div>
+    <div class="card-somatorio">
+      <span class="label">QUANTIDADE DE ITENS VENDIDOS</span>
+      <span class="valor">{{ totalVendasItens }}</span>
+    </div>
+  </div>
+
+  <!-- 4. Tabela de Resultados -->
+  <div class="card-table">
+    <p-table
+      [value]="vendas"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} vendas"
+      [rowsPerPageOptions]="[10, 20, 50]">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">Venda (ID) <p-sortIcon field="id"/></th>
+          <th pSortableColumn="dataHora">Data/Hora <p-sortIcon field="dataHora"/></th>
+          <th pSortableColumn="usuarioResponsavel.nomeCompleto">Operador <p-sortIcon field="usuarioResponsavel.nomeCompleto"/></th>
+          <th>Itens</th>
+          <th pSortableColumn="valorTotal">Valor Total <p-sortIcon field="valorTotal"/></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-venda>
+        <tr>
+          <td>#{{ venda.id }}</td>
+          <td>{{ venda.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ venda.usuarioResponsavel.nomeCompleto }}</td>
+          <td>{{ venda.itens.length }} item(ns)</td>
+          <td>{{ venda.valorTotal | currency:'BRL' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">Nenhuma venda encontrada com os filtros aplicados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

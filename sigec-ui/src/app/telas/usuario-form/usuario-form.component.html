@@ -1,0 +1,105 @@
+<div class="admin-page">
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <h2>{{ isEditMode ? 'Edição de Usuário' : 'Cadastro de Usuário' }}</h2>
+    </div>
+    <div class="p-toolbar-group-right">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="p-button-secondary"
+        routerLink="/app/usuarios" />
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="onSubmit()" />
+    </div>
+  </p-toolbar>
+
+  <div class="form-container">
+    <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+
+      <p-message
+        *ngIf="errorMessage"
+        severity="error"
+        [text]="errorMessage" />
+
+      <div class="form-field">
+        <label for="nomeCompleto">Nome Completo *</label>
+        <input
+          pInputText
+          id="nomeCompleto"
+          formControlName="nomeCompleto"
+          [class.ng-invalid]="isFieldInvalid('nomeCompleto')"
+          [class.ng-dirty]="isFieldInvalid('nomeCompleto')"
+        />
+        <small *ngIf="isFieldInvalid('nomeCompleto')" class="p-error">
+          Nome completo é obrigatório.
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label for="email">E-mail *</label>
+        <input
+          pInputText
+          id="email"
+          formControlName="email"
+          [class.ng-invalid]="isFieldInvalid('email')"
+          [class.ng-dirty]="isFieldInvalid('email')"
+        />
+        <small *ngIf="isFieldInvalid('email') && usuarioForm.get('email')?.errors?.['required']" class="p-error">
+          E-mail é obrigatório.
+        </small>
+        <small *ngIf="isFieldInvalid('email') && usuarioForm.get('email')?.errors?.['email']" class="p-error">
+          Formato de e-mail inválido.
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label for="senha">
+          {{ isEditMode ? 'Senha' : 'Senha *' }}
+        </label>
+        <p-password
+          id="senha"
+          formControlName="senha"
+          [feedback]="true"
+          [toggleMask]="true"
+          [class.ng-invalid]="isFieldInvalid('senha')"
+          [class.ng-dirty]="isFieldInvalid('senha')"
+          pTooltip="{{ isEditMode ? 'Deixe em branco para não alterar a senha atual' : '' }}"
+        />
+        <small *ngIf="isFieldInvalid('senha') && !isEditMode" class="p-error">
+          A senha é obrigatória e deve ter 8+ caracteres, 1 maiúscula e 1 número.
+        </small>
+        <small *ngIf="isFieldInvalid('senha') && isEditMode" class="p-error">
+          A senha deve ter 8+ caracteres, 1 maiúscula e 1 número.
+        </small>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="perfil">Perfil *</label>
+          <p-dropdown
+            id="perfil"
+            [options]="perfis"
+            formControlName="perfil"
+            optionLabel="label"
+            optionValue="value"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="status">Status</label>
+          <div class="status-switch">
+            <p-inputSwitch id="status" formControlName="status" />
+            <span class="status-label">
+              {{ usuarioForm.get('status')?.value ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

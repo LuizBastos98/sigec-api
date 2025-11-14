@@ -1,0 +1,93 @@
+<div class="admin-page">
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <h2>Registrar Movimentação de Estoque</h2>
+    </div>
+    <div class="p-toolbar-group-right">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="p-button-secondary"
+        routerLink="/app/estoque" /> <p-button
+      label="Registrar"
+      icon="pi pi-check"
+      (click)="onSubmit()" />
+    </div>
+  </p-toolbar>
+
+  <div class="form-container">
+    <form [formGroup]="movimentacaoForm" (ngSubmit)="onSubmit()">
+
+      <p-message
+        *ngIf="errorMessage"
+        severity="error"
+        [text]="errorMessage" />
+
+      <div class="form-field">
+        <label for="produtoId">Produto *</label>
+        <p-dropdown
+          id="produtoId"
+          [options]="produtos"
+          formControlName="produtoId"
+          placeholder="Selecione o produto"
+          [filter]="true" filterBy="label" [class.ng-invalid]="isFieldInvalid('produtoId')"
+          [class.ng-dirty]="isFieldInvalid('produtoId')"
+        />
+        <small *ngIf="isFieldInvalid('produtoId')" class="p-error">
+          Produto é obrigatório.
+        </small>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label for="tipo">Tipo de Movimentação *</label>
+          <p-dropdown
+            id="tipo"
+            [options]="tiposMovimentacao"
+            formControlName="tipo"
+            placeholder="Selecione o tipo"
+            [class.ng-invalid]="isFieldInvalid('tipo')"
+            [class.ng-dirty]="isFieldInvalid('tipo')"
+          />
+          <small *ngIf="isFieldInvalid('tipo')" class="p-error">
+            Tipo é obrigatório.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="quantidade">Quantidade *</label>
+          <p-inputNumber
+            id="quantidade"
+            formControlName="quantidade"
+            mode="decimal"
+            [showButtons]="true"
+            [class.ng-invalid]="isFieldInvalid('quantidade')"
+            [class.ng-dirty]="isFieldInvalid('quantidade')"
+          />
+          <small class="p-info">
+            Para ENTRADA, use + (ex: 10). Para AJUSTE de saída, use - (ex: -2).
+          </small>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="motivo">
+          Motivo
+          <span *ngIf="movimentacaoForm.get('tipo')?.value === 'AJUSTE'"> *</span>
+        </label>
+        <textarea
+          pInputTextarea
+          id="motivo"
+          formControlName="motivo"
+          rows="3"
+          placeholder="Obrigatório se for 'Ajuste' (ex: Perda, Correção de contagem, etc.)"
+          [class.ng-invalid]="isFieldInvalid('motivo')"
+          [class.ng-dirty]="isFieldInvalid('motivo')"
+        ></textarea>
+        <small *ngIf="isFieldInvalid('motivo')" class="p-error">
+          Motivo é obrigatório para Ajustes (mínimo 5 caracteres).
+        </small>
+      </div>
+    </form>
+  </div>
+</div>

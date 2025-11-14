@@ -1,0 +1,108 @@
+<div class="admin-page">
+  <p-toolbar>
+    <div class="p-toolbar-group-left">
+      <h2>{{ isEditMode ? 'Edição de Produto' : 'Cadastro de Produto' }}</h2>
+    </div>
+    <div class="p-toolbar-group-right">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="p-button-secondary"
+        routerLink="/app/estoque" />
+
+      <p-button
+        label="Salvar"
+        icon="pi pi-check"
+        (click)="onSubmit()" />
+    </div>
+  </p-toolbar>
+
+  <div class="form-container">
+    <form [formGroup]="produtoForm" (ngSubmit)="onSubmit()">
+
+      <p-message
+        *ngIf="errorMessage"
+        severity="error"
+        [text]="errorMessage" />
+
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label for="codigo">Código (SKU) *</label>
+          <input
+            pInputText
+            id="codigo"
+            formControlName="codigo"
+            [class.ng-invalid]="isFieldInvalid('codigo')"
+            [class.ng-dirty]="isFieldInvalid('codigo')"
+          />
+          <small *ngIf="isFieldInvalid('codigo')" class="p-error">
+            Código é obrigatório.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="nome">Nome do Produto *</label>
+          <input
+            pInputText
+            id="nome"
+            formControlName="nome"
+            [class.ng-invalid]="isFieldInvalid('nome')"
+            [class.ng-dirty]="isFieldInvalid('nome')"
+          />
+          <small *ngIf="isFieldInvalid('nome')" class="p-error">
+            Nome é obrigatório.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="categoria">Categoria</label>
+        <input
+          pInputText
+          id="categoria"
+          formControlName="categoria"
+        />
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-field">
+          <label for="precoUnitario">Preço Unitário (R$) *</label>
+          <p-inputNumber
+            id="precoUnitario"
+            formControlName="precoUnitario"
+            mode="currency"
+            currency="BRL"
+            locale="pt-BR"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [class.ng-invalid]="isFieldInvalid('precoUnitario')"
+            [class.ng-dirty]="isFieldInvalid('precoUnitario')"
+          />
+          <small *ngIf="isFieldInvalid('precoUnitario')" class="p-error">
+            Preço é obrigatório e deve ser maior que R$ 0,00.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="quantidadeEmEstoque">Estoque Inicial *</label>
+          <p-inputNumber
+            id="quantidadeEmEstoque"
+            formControlName="quantidadeEmEstoque"
+            mode="decimal"
+            [showButtons]="true"
+            [min]="0"
+            [class.ng-invalid]="isFieldInvalid('quantidadeEmEstoque')"
+            [class.ng-dirty]="isFieldInvalid('quantidadeEmEstoque')"
+          />
+          <small *ngIf="isFieldInvalid('quantidadeEmEstoque')" class="p-error">
+            Estoque é obrigatório (mínimo 0).
+          </small>
+          <small *ngIf="isEditMode" class="p-info">
+            O estoque é alterado apenas por Movimentações.
+          </small>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

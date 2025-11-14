@@ -1,0 +1,60 @@
+/* Reutilizando o estilo dos outros formulários */
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  p-dropdown,
+  p-inputNumber,
+  textarea[pInputTextarea] {
+    width: 100%;
+  }
+
+  :host ::ng-deep p-inputNumber input {
+    width: 100%;
+  }
+
+  .p-info {
+    font-size: 0.8rem;
+    color: #6c757d; // um cinza
+  }
+}
+
+// Grid para 2 colunas
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+// Borda vermelha para inputs inválidos
+.ng-invalid.ng-dirty {
+  :host ::ng-deep .p-dropdown,
+  :host ::ng-deep .p-inputNumber > .p-inputwrapper,
+  :host ::ng-deep .p-inputtextarea {
+    border-color: #e24c4c;
+  }
+}

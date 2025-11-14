@@ -1,0 +1,67 @@
+/* Reutilizando o estilo da página de listagem */
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Container do formulário */
+.form-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Espaçamento entre os campos */
+  }
+}
+
+/* Cada campo do formulário (label + input) */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  /* Garante que os inputs ocupem 100% da largura */
+  input[pInputText],
+  p-password,
+  p-dropdown {
+    width: 100%;
+  }
+
+  /* Ajuste para o componente de Senha */
+  :host ::ng-deep p-password input {
+    width: 100%;
+  }
+}
+
+/* Layout em grid para Perfil e Status ficarem lado a lado */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Alinhamento do switch de Status */
+.status-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Adiciona a borda vermelha em inputs inválidos do PrimeNG */
+.ng-invalid.ng-dirty {
+  :host ::ng-deep .p-inputtext,
+  :host ::ng-deep .p-password > .p-inputwrapper,
+  :host ::ng-deep .p-dropdown {
+    border-color: #e24c4c;
+  }
+}

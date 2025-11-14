@@ -1,0 +1,62 @@
+/* :host é o próprio componente */
+:host {
+  display: block;
+  height: 100%;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topbar {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0; /* Impede o topbar de encolher */
+}
+
+.topbar-start, .topbar-end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+/* O conteúdo principal cresce para ocupar o espaço */
+.content {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto; /* Adiciona scroll se o conteúdo for grande */
+}
+
+/* Estilo do menu dentro da sidebar */
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  a {
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: #495057;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+}
