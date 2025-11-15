@@ -3,41 +3,45 @@ package br.com.sigec.service;
 import br.com.sigec.dto.LoginRequestDTO;
 import br.com.sigec.dto.LoginResponseDTO;
 import br.com.sigec.model.Usuario;
-import br.com.sigec.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    // 1. Injeta o "Gerenciador de Autenticação" do Spring
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    public LoginResponseDTO login(LoginRequestDTO dto) {
+    // 1. INJETAR O NOSSO SERVIÇO DE TOKEN
+    @Autowired
+    private TokenService tokenService;
 
-        // 2. O Spring Security agora faz a validação da senha para nós
-        // (Ele usa o UserDetailsServiceImpl e o PasswordEncoder por baixo dos panos)
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha())
-        );
+    public LoginResponseDTO login(LoginRequestDTO dto) throws AuthenticationException {
 
-        // 3. Se chegou aqui, o login foi VÁLIDO.
-        // O "authentication.getName()" retorna o e-mail que foi validado.
-        Usuario usuario = usuarioRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Erro inesperado após autenticação"));
+        // 2. Cria o "pacote" de autenticação (email/senha)
+        UsernamePasswordAuthenticationToken usernamePassword =
+                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha());
 
-        // 4. Retorna os dados para o frontend
+        // 3. O Spring Security tenta autenticar
+        Authentication auth = authenticationManager.authenticate(usernamePassword);
+
+        // 4. Se chegou aqui, o login foi VÁLIDO.
+        // Pegamos os dados do usuário que foi autenticado
+        Usuario usuarioAutenticado = (Usuario) auth.getPrincipal();
+
+        // 5. GERAMOS O TOKEN (O "CRACHÁ")
+        String token = tokenService.generateToken(usuarioAutenticado);
+
+        // 6. Retornamos o DTO de Resposta com o Token incluído
         return new LoginResponseDTO(
-                usuario.getId(),
-                usuario.getNomeCompleto(),
-                usuario.getPerfil()
+                usuarioAutenticado.getId(),
+                usuarioAutenticado.getNomeCompleto(),
+                usuarioAutenticado.getPerfil(),
+                token // <-- O TOKEN VAI AQUI
         );
     }
 }

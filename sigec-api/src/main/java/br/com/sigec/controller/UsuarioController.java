@@ -6,78 +6,84 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+// 1. IMPORTAR O PASSWORD ENCODER
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Controller REST para o CRUD de Usuários.
- * Expõe os endpoints para o frontend.
- */
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "http://localhost:4200")// Prefixo da URL para todos os métodos
+// 2. REMOVA O @CrossOrigin DAQUI
+// (O seu SecurityConfig.java com o 'corsConfigurationSource()' já cuida disso!)
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    /**
-     * Endpoint para LISTAR todos os usuários.
-     * HTTP GET /api/usuarios
-     */
+    // 3. INJETAR O ENCODER
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping
     public List<Usuario> listarTodos() {
         return usuarioService.findAll();
     }
 
-    /**
-     * Endpoint para BUSCAR um usuário por ID.
-     * HTTP GET /api/usuarios/{id}
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
         return usuarioService.findById(id)
-                .map(ResponseEntity::ok) // Se encontrar, retorna 200 OK com o usuário
-                .orElse(ResponseEntity.notFound().build()); // Se não, retorna 404 Not Found
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Endpoint para CRIAR um novo usuário.
-     * HTTP POST /api/usuarios
-     */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) // Retorna 201 Created
-    public Usuario criar(@Valid @RequestBody Usuario usuario) {
-        // @Valid: Ativa as validações que colocamos no Model (@NotBlank, @Email, etc.)
-        return usuarioService.save(usuario);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Usuario criar(@Valid @RequestBody Usuario novoUsuario) {
+        // (Nota: Idealmente, o 'save' no service deveria criptografar a senha)
+        // Mas vamos garantir aqui, caso o service não o faça.
+        novoUsuario.setSenha(passwordEncoder.encode(novoUsuario.getSenha()));
+        return usuarioService.save(novoUsuario);
     }
 
     /**
-     * Endpoint para ATUALIZAR um usuário existente.
-     * HTTP PUT /api/usuarios/{id}
+     * Endpoint para ATUALIZAR um usuário (AGORA 100% CORRETO E SEGURO)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody Usuario usuarioAtualizado
+    ) {
         return usuarioService.findById(id)
                 .map(usuarioExistente -> {
-                    usuario.setId(id); // Garante que estamos atualizando o ID correto
-                    return ResponseEntity.ok(usuarioService.save(usuario));
+
+                    // --- 4. A LÓGICA DE CÓPIA (O JEITO CERTO) ---
+
+                    // Copia os campos do DTO (usuarioAtualizado) para a Entidade (usuarioExistente)
+                    usuarioExistente.setNomeCompleto(usuarioAtualizado.getNomeCompleto());
+                    usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+                    usuarioExistente.setPerfil(usuarioAtualizado.getPerfil());
+                    usuarioExistente.setStatus(usuarioAtualizado.getStatus());
+
+                    // Só atualiza a senha SE o usuário digitou uma nova
+                    // (O frontend envia "" ou null se a senha não for mudada)
+                    String novaSenha = usuarioAtualizado.getSenha();
+                    if (novaSenha != null && !novaSenha.isEmpty()) {
+                        usuarioExistente.setSenha(passwordEncoder.encode(novaSenha));
+                    }
+
+                    // Salva a ENTIDADE EXISTENTE (com a senha criptografada)
+                    return ResponseEntity.ok(usuarioService.save(usuarioExistente));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Endpoint para EXCLUIR um usuário.
-     * HTTP DELETE /api/usuarios/{id}
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
             usuarioService.deleteById(id);
-            return ResponseEntity.noContent().build(); // Retorna 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            // Captura a exceção que criamos no Service se o usuário não for encontrado
             return ResponseEntity.notFound().build();
         }
     }

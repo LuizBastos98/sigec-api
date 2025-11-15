@@ -7,10 +7,10 @@
 
     <!-- Links de ADMIN -->
     <!--
-      *** MUDANÇA TEMPORÁRIA AQUI ***
-      Permite que o OPERADOR também veja o link de Usuários
+      *** CORREÇÃO AQUI ***
+      Voltamos a regra para SÓ ADMIN ver este link.
     -->
-    <a routerLink="/app/usuarios" *ngIf="roleUsuario === 'ADMIN' || roleUsuario === 'OPERADOR'" (click)="sidebarVisible = false">Usuários</a>
+    <a routerLink="/app/usuarios" *ngIf="roleUsuario === 'ADMIN'" (click)="sidebarVisible = false">Usuários</a>
     <a routerLink="/app/estoque" *ngIf="roleUsuario === 'ADMIN'" (click)="sidebarVisible = false">Gestão de Estoque</a>
 
     <!-- Links de OPERADOR -->
@@ -18,6 +18,8 @@
   </nav>
 </p-sidebar>
 
+<!-- O resto do seu arquivo HTML continua exatamente igual -->
+<!-- ... (div.main-container, p-toast, p-confirmDialog) ... -->
 <div class="main-container">
 
   <header class="topbar">
@@ -51,6 +53,5 @@
 
 </div>
 
-<!-- Tags Globais de Mensagem e Confirmação -->
 <p-toast />
 <p-confirmDialog [style]="{width: '450px'}" />
