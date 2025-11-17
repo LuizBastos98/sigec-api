@@ -61,43 +61,51 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
+                        // Rotas Públicas
                         .requestMatchers("/", "/error").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
+                        // Rotas de ADMIN
                         .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
                         .requestMatchers("/api/estoque/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("ADMIN")
+                        // O PATCH de produtos também precisa ser protegido
+                        .requestMatchers(HttpMethod.PATCH, "/api/produtos/**").hasRole("ADMIN")
 
+                        // Rotas de OPERADOR
                         .requestMatchers(HttpMethod.POST, "/api/vendas/registrar").hasRole("OPERADOR")
 
+                        // Rotas Comuns (Leitura)
                         .requestMatchers(HttpMethod.GET, "/api/produtos").hasAnyRole("ADMIN", "OPERADOR")
                         .requestMatchers(HttpMethod.GET, "/api/produtos/**").hasAnyRole("ADMIN", "OPERADOR")
                         .requestMatchers(HttpMethod.GET, "/api/vendas").hasAnyRole("ADMIN", "OPERADOR")
 
+                        // Qualquer outra
                         .anyRequest().authenticated()
                 )
 
+                // Necessário para o H2 Console funcionar
                 .headers(headers -> headers.frameOptions(options -> options.disable()));
 
+        // Adiciona o nosso filtro de Token antes do filtro padrão
         http.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // REGISTRA O PROVIDER AQUI (ESSENCIAL!)
-        http.authenticationProvider(authenticationProvider());
 
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // *** AQUI ESTÁ A CORREÇÃO PARA O BOTÃO FUNCIONAR ***
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-// 1. IMPORTAR O PASSWORD ENCODER
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
-// 2. REMOVA O @CrossOrigin DAQUI
-// (O seu SecurityConfig.java com o 'corsConfigurationSource()' já cuida disso!)
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    // 3. INJETAR O ENCODER
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -40,15 +36,15 @@ public class UsuarioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Usuario criar(@Valid @RequestBody Usuario novoUsuario) {
-        // (Nota: Idealmente, o 'save' no service deveria criptografar a senha)
-        // Mas vamos garantir aqui, caso o service não o faça.
+        // *** ALTERAÇÃO: Validação manual da senha na CRIAÇÃO ***
+        if (novoUsuario.getSenha() == null || novoUsuario.getSenha().length() < 8) {
+            throw new RuntimeException("A senha é obrigatória e deve ter no mínimo 8 caracteres.");
+        }
+
         novoUsuario.setSenha(passwordEncoder.encode(novoUsuario.getSenha()));
         return usuarioService.save(novoUsuario);
     }
 
-    /**
-     * Endpoint para ATUALIZAR um usuário (AGORA 100% CORRETO E SEGURO)
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizar(
             @PathVariable Long id,
@@ -56,23 +52,16 @@ public class UsuarioController {
     ) {
         return usuarioService.findById(id)
                 .map(usuarioExistente -> {
-
-                    // --- 4. A LÓGICA DE CÓPIA (O JEITO CERTO) ---
-
-                    // Copia os campos do DTO (usuarioAtualizado) para a Entidade (usuarioExistente)
                     usuarioExistente.setNomeCompleto(usuarioAtualizado.getNomeCompleto());
                     usuarioExistente.setEmail(usuarioAtualizado.getEmail());
                     usuarioExistente.setPerfil(usuarioAtualizado.getPerfil());
                     usuarioExistente.setStatus(usuarioAtualizado.getStatus());
 
-                    // Só atualiza a senha SE o usuário digitou uma nova
-                    // (O frontend envia "" ou null se a senha não for mudada)
                     String novaSenha = usuarioAtualizado.getSenha();
                     if (novaSenha != null && !novaSenha.isEmpty()) {
                         usuarioExistente.setSenha(passwordEncoder.encode(novaSenha));
                     }
 
-                    // Salva a ENTIDADE EXISTENTE (com a senha criptografada)
                     return ResponseEntity.ok(usuarioService.save(usuarioExistente));
                 })
                 .orElse(ResponseEntity.notFound().build());
@@ -86,5 +75,12 @@ public class UsuarioController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> trocarStatus(@PathVariable Long id) {
+        usuarioService.trocarStatus(id);
+        return ResponseEntity.noContent().build();
     }
 }

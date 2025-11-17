@@ -27,7 +27,7 @@ public class ItemVenda {
     @JoinColumn(name = "venda_id", nullable = false)
     private Venda venda;
 
-    // *** MUDANÇA AQUI ***
+
     // Força o Hibernate a buscar o produto JUNTOS com o ItemVenda
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "produto_id", nullable = false)
