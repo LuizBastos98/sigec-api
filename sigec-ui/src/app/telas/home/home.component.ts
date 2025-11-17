@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
-import { RouterLink } from '@angular/router'; // 1. IMPORTE O ROUTERLINK
+import { forkJoin, of } from 'rxjs'; // Importe o 'of' também
+import { RouterLink } from '@angular/router';
 
 // Módulos PrimeNG
 import { CardModule } from 'primeng/card';
@@ -19,21 +19,19 @@ import { RelatorioService } from '../../services/relatorio.service';
     CommonModule,
     CardModule,
     ButtonModule,
-    RouterLink // 2. ADICIONE AQUI
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
 
-  // Variáveis para o Dashboard
   public nomeUsuario: string = '';
   public totalVendas: number = 0;
   public qtdProdutos: number = 0;
   public qtdUsuarios: number = 0;
   public roleUsuario: string = '';
 
-  // Injeções
   private usuarioService = inject(UsuarioService);
   private produtoService = inject(ProdutoService);
   private relatorioService = inject(RelatorioService);
@@ -47,27 +45,37 @@ export class HomeComponent implements OnInit {
     const userDataStorage = localStorage.getItem('userData');
     if (userDataStorage) {
       const userData = JSON.parse(userDataStorage);
-      this.nomeUsuario = userData.nome.split(' ')[0]; // Pega só o primeiro nome
+      this.nomeUsuario = userData.nome.split(' ')[0];
       this.roleUsuario = userData.role;
     }
   }
 
   private carregarEstatisticas(): void {
-    // forkJoin: Faz as 3 chamadas em paralelo e espera todas terminarem
-    forkJoin({
-      usuarios: this.usuarioService.getUsuarios(),
+    // 1. Define as requisições que TODO MUNDO pode fazer
+    const requisicoes: any = {
       produtos: this.produtoService.getProdutos(),
-      // Busca todas as vendas (sem filtro)
       vendas: this.relatorioService.buscarRelatorio({})
-    }).subscribe({
-      next: (resultado) => {
-        // 1. Conta Usuários
-        this.qtdUsuarios = resultado.usuarios.length;
+    };
 
-        // 2. Conta Produtos
+    // 2. Se for ADMIN, adiciona a requisição de usuários
+    // (Se for Operador, não pedimos, para não dar erro 403)
+    if (this.roleUsuario === 'ADMIN') {
+      requisicoes.usuarios = this.usuarioService.getUsuarios();
+    } else {
+      // Se não for admin, retornamos uma lista vazia "fake" para não quebrar a lógica
+      requisicoes.usuarios = of([]);
+    }
+
+    // 3. Executa o forkJoin
+    forkJoin(requisicoes).subscribe({
+      next: (resultado: any) => {
+        // Agora é seguro ler os dados
+
+        // Se 'usuarios' existir no resultado, pega o length. Se não, é 0.
+        this.qtdUsuarios = resultado.usuarios ? resultado.usuarios.length : 0;
+
         this.qtdProdutos = resultado.produtos.length;
 
-        // 3. Soma o Valor Total Vendido
         this.totalVendas = resultado.vendas.reduce((total: number, venda: any) => {
           return total + (venda.valorTotal || 0);
         }, 0);
