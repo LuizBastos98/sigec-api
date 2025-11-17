@@ -3,7 +3,6 @@ package br.com.sigec.service;
 import br.com.sigec.model.Usuario;
 import br.com.sigec.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +18,12 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder; // Injetando o BCrypt
+    // REMOVI O PASSWORD ENCODER DAQUI (O Controller já está fazendo isso)
 
     /**
      * Lista todos os usuários.
      */
-    @Transactional(readOnly = true) // Boa prática para métodos de consulta
+    @Transactional(readOnly = true)
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
@@ -40,23 +38,19 @@ public class UsuarioService {
 
     /**
      * Salva (cria ou atualiza) um usuário.
-     * Implementa as regras de negócio.
      */
     @Transactional
     public Usuario save(Usuario usuario) {
 
         // 1. REGRA: Validar e-mail duplicado
-        // (Estamos ignorando o ID do próprio usuário, caso seja uma atualização)
         Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
         if (usuarioExistente.isPresent() && !usuarioExistente.get().getId().equals(usuario.getId())) {
-            // Lançar uma exceção específica seria o ideal, mas por enquanto vamos simples
             throw new RuntimeException("E-mail já cadastrado: " + usuario.getEmail());
         }
 
-        // 2. REGRA: Criptografar a senha
-        // (A política de 8 caracteres  é tratada pelo @Size na entidade)
-        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCriptografada);
+        // 2. REGRA DE CRIPTOGRAFIA FOI REMOVIDA DAQUI
+        // O Controller já manda a senha criptografada.
+        // Apenas salvamos o objeto como ele chegou.
 
         // 3. Salva no banco
         return usuarioRepository.save(usuario);
@@ -68,7 +62,6 @@ public class UsuarioService {
     @Transactional
     public void deleteById(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            // Lançar exceção de "não encontrado"
             throw new RuntimeException("Usuário não encontrado com ID: " + id);
         }
         usuarioRepository.deleteById(id);

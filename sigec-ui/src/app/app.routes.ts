@@ -66,7 +66,7 @@ export const routes: Routes = [
       {
         path: 'estoque/:id',
         component: ProdutoFormComponent,
-        canActivate: [adminGuard] // Protegida!
+        canActivate: [adminGuard] // Protegida!-cd
       },
     ]
   },
