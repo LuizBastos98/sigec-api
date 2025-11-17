@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs'; // Importante para carregar tudo junto
+import { forkJoin } from 'rxjs';
+import { RouterLink } from '@angular/router'; // 1. IMPORTE O ROUTERLINK
 
 // Módulos PrimeNG
 import { CardModule } from 'primeng/card';
@@ -17,7 +18,8 @@ import { RelatorioService } from '../../services/relatorio.service';
   imports: [
     CommonModule,
     CardModule,
-    ButtonModule
+    ButtonModule,
+    RouterLink // 2. ADICIONE AQUI
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -62,8 +64,7 @@ export class HomeComponent implements OnInit {
         // 1. Conta Usuários
         this.qtdUsuarios = resultado.usuarios.length;
 
-        // 2. Conta Produtos (somando o estoque total ou apenas contando itens?)
-        // Vamos contar quantos "tipos" de produtos existem
+        // 2. Conta Produtos
         this.qtdProdutos = resultado.produtos.length;
 
         // 3. Soma o Valor Total Vendido
@@ -73,7 +74,6 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao carregar estatísticas do dashboard', err);
-        // Não precisa mostrar erro na tela (o dashboard pode ficar zerado se falhar)
       }
     });
   }

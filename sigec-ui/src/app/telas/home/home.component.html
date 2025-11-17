@@ -48,8 +48,31 @@
   <div class="quick-actions">
     <h3>Acesso Rápido</h3>
     <div class="actions-grid">
-      <p-button label="Nova Venda" icon="pi pi-shopping-cart" routerLink="/app/caixa"></p-button>
-      <p-button label="Ver Relatórios" icon="pi pi-chart-line" styleClass="p-button-secondary" routerLink="/app/relatorios"></p-button>
+      <p-button
+        label="Nova Venda (Caixa)"
+        icon="pi pi-shopping-cart"
+        routerLink="/app/caixa"
+        *ngIf="roleUsuario === 'OPERADOR' || roleUsuario === 'ADMIN'"></p-button>
+
+      <p-button
+        label="Ver Relatórios"
+        icon="pi pi-chart-line"
+        styleClass="p-button-secondary"
+        routerLink="/app/relatorios"></p-button>
+
+      <p-button
+        label="Novo Produto"
+        icon="pi pi-plus"
+        styleClass="p-button-secondary"
+        routerLink="/app/estoque/novo"
+        *ngIf="roleUsuario === 'ADMIN'"></p-button>
+
+      <p-button
+        label="Novo Usuário"
+        icon="pi pi-user-plus"
+        styleClass="p-button-secondary"
+        routerLink="/app/usuarios/novo"
+        *ngIf="roleUsuario === 'ADMIN'"></p-button>
     </div>
   </div>
 
