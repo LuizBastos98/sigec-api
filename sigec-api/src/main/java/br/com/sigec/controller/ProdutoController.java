@@ -8,35 +8,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-
 import java.util.List;
 
-/**
- * Controller REST para o CRUD de Produtos.
- * Expõe os endpoints para o frontend.
- */
 @RestController
 @RequestMapping("/api/produtos")
-@CrossOrigin(origins = "http://localhost:4200")// Prefixo da URL
 public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
 
     /**
-     * Endpoint para LISTAR todos os produtos.
-     * HTTP GET /api/produtos
+     * Lista produtos. Se passar ?somenteAtivos=true, filtra os inativos.
      */
     @GetMapping
-    public List<Produto> listarTodos() {
+    public List<Produto> listarTodos(@RequestParam(required = false, defaultValue = "false") Boolean somenteAtivos) {
+        if (Boolean.TRUE.equals(somenteAtivos)) {
+            return produtoService.listarApenasAtivos();
+        }
         return produtoService.findAll();
     }
 
-    /**
-     * Endpoint para BUSCAR um produto por ID.
-     * HTTP GET /api/produtos/{id}
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
         return produtoService.findById(id)
@@ -44,42 +35,36 @@ public class ProdutoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Endpoint para CRIAR um novo produto.
-     * HTTP POST /api/produtos
-     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Produto criar(@Valid @RequestBody Produto produto) {
-        // @Valid ativa as validações do Model (@NotBlank, @Min, @DecimalMin)
         return produtoService.save(produto);
     }
 
-    /**
-     * Endpoint para ATUALIZAR um produto existente.
-     * HTTP PUT /api/produtos/{id}
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizar(@PathVariable Long id, @Valid @RequestBody Produto produto) {
         return produtoService.findById(id)
                 .map(produtoExistente -> {
-                    produto.setId(id); // Garante o ID correto
+                    produto.setId(id);
                     return ResponseEntity.ok(produtoService.save(produto));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Endpoint para EXCLUIR um produto.
-     * HTTP DELETE /api/produtos/{id}
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
             produtoService.deleteById(id);
-            return ResponseEntity.noContent().build(); // 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // --- NOVO ENDPOINT ---
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> trocarStatus(@PathVariable Long id) {
+        produtoService.trocarStatus(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; // 1. IMPORTADO O ROUTERLINK
+import { Router, RouterLink } from '@angular/router';
 
 // Imports do PrimeNG
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
-import { TooltipModule } from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip'; // Adicionado
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Nosso Service
@@ -17,11 +17,11 @@ import { ProdutoService } from '../../services/produto.service';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink, // 2. ADICIONADO AQUI
+    RouterLink,
     TableModule,
     ButtonModule,
     ToolbarModule,
-    TooltipModule
+    TooltipModule // Adicionado
   ],
   templateUrl: './produtos.component.html',
   styleUrl: './produtos.component.scss'
@@ -44,54 +44,42 @@ export class ProdutosComponent implements OnInit {
     this.produtoService.getProdutos().subscribe(
       (response) => {
         this.produtos = response;
-        console.log('Produtos carregados:', this.produtos);
       },
       (error) => {
         console.error('Erro ao carregar produtos:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Falha ao carregar produtos.'
-        });
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar produtos.' });
       }
     );
   }
 
   public novoProduto(): void {
-    // Navega para /app/estoque/novo
     this.router.navigate(['/app/estoque/novo']);
   }
 
   public editarProduto(id: number): void {
-    // Navega para /app/estoque/1 (ou o id clicado)
     this.router.navigate(['/app/estoque', id]);
   }
 
-  public excluirProduto(id: number, nome: string): void {
+  // --- MÉTODO ALTERADO (era 'excluirProduto') ---
+  public alternarStatus(produto: any): void {
+    const acao = produto.ativo ? 'desativar' : 'ativar';
+
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir o produto "${nome}"? Esta ação não pode ser desfeita.`,
-      header: 'Confirmar Exclusão',
+      message: `Tem certeza que deseja ${acao} o produto "${produto.nome}"?`,
+      header: 'Confirmar Ação',
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim, excluir',
+      acceptLabel: 'Sim',
       rejectLabel: 'Cancelar',
       accept: () => {
-        this.produtoService.deletarProduto(id).subscribe(
+        // Chama o service de produto
+        this.produtoService.trocarStatus(produto.id).subscribe(
           () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Produto excluído com sucesso!'
-            });
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Status alterado com sucesso!' });
             this.carregarProdutos(); // Recarrega a lista
           },
           (error) => {
-            console.error('Erro ao excluir produto:', error);
-            // Mensagem de erro (ex: produto com venda vinculada)
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: error.error?.message || 'Falha ao excluir produto.'
-            });
+            console.error('Erro:', error);
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao alterar status.' });
           }
         );
       }

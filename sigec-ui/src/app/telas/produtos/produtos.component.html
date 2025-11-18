@@ -32,6 +32,7 @@
           <th pSortableColumn="codigo">Código <p-sortIcon field="codigo"/></th>
           <th pSortableColumn="nome">Nome <p-sortIcon field="nome"/></th>
           <th pSortableColumn="categoria">Categoria <p-sortIcon field="categoria"/></th>
+          <th>Status</th>
           <th pSortableColumn="precoUnitario">Preço (R$) <p-sortIcon field="precoUnitario"/></th>
           <th pSortableColumn="quantidadeEmEstoque">Estoque <p-sortIcon field="quantidadeEmEstoque"/></th>
           <th>Ações</th>
@@ -39,10 +40,15 @@
       </ng-template>
 
       <ng-template pTemplate="body" let-produto>
-        <tr>
+        <tr [ngClass]="{'linha-inativa': !produto.ativo}">
           <td>{{ produto.codigo }}</td>
           <td>{{ produto.nome }}</td>
           <td>{{ produto.categoria }}</td>
+          <td>
+             <span [class]="produto.ativo ? 'status-badge status-ativo' : 'status-badge status-inativo'">
+                {{ produto.ativo ? 'ATIVO' : 'INATIVO' }}
+             </span>
+          </td>
           <td>{{ produto.precoUnitario | currency:'BRL' }}</td>
           <td>{{ produto.quantidadeEmEstoque }}</td>
           <td>
@@ -54,18 +60,18 @@
               pTooltip="Editar"/>
 
             <p-button
-              icon="pi pi-trash"
-              styleClass="p-button-sm p-button-danger"
+              [icon]="produto.ativo ? 'pi pi-ban' : 'pi pi-check-circle'"
+              [styleClass]="produto.ativo ? 'p-button-sm p-button-danger' : 'p-button-sm p-button-success'"
               [text]="true"
-              pTooltip="Excluir"
-              (click)="excluirProduto(produto.id, produto.nome)" />
+              [pTooltip]="produto.ativo ? 'Desativar' : 'Ativar'"
+              (click)="alternarStatus(produto)" />
           </td>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="6">Nenhum produto encontrado.</td>
+          <td colspan="7">Nenhum produto encontrado.</td>
         </tr>
       </ng-template>
 

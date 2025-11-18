@@ -1,5 +1,79 @@
-<div class="home-container">
-  <h2>Página Inicial</h2>
-  <p>Seja bem-vindo ao sistema Sigec!</p>
-  <p>Use o menu lateral para navegar pelas funcionalidades.</p>
+<div class="dashboard-container">
+
+  <div class="welcome-header">
+    <h1>Olá, {{ nomeUsuario }}!</h1>
+    <p class="subtitle">Aqui está o resumo do sistema hoje.</p>
+  </div>
+
+  <div class="kpi-grid">
+
+    <p-card styleClass="kpi-card vendas-card">
+      <ng-template pTemplate="header">
+        <div class="card-icon">
+          <i class="pi pi-dollar"></i>
+        </div>
+      </ng-template>
+      <div class="card-content">
+        <span class="card-label">Total Vendido</span>
+        <span class="card-value">{{ totalVendas | currency:'BRL' }}</span>
+      </div>
+    </p-card>
+
+    <p-card styleClass="kpi-card produtos-card">
+      <ng-template pTemplate="header">
+        <div class="card-icon">
+          <i class="pi pi-box"></i>
+        </div>
+      </ng-template>
+      <div class="card-content">
+        <span class="card-label">Produtos Cadastrados</span>
+        <span class="card-value">{{ qtdProdutos }}</span>
+      </div>
+    </p-card>
+
+    <p-card *ngIf="roleUsuario === 'ADMIN'" styleClass="kpi-card usuarios-card">
+      <ng-template pTemplate="header">
+        <div class="card-icon">
+          <i class="pi pi-users"></i>
+        </div>
+      </ng-template>
+      <div class="card-content">
+        <span class="card-label">Usuários Ativos</span>
+        <span class="card-value">{{ qtdUsuarios }}</span>
+      </div>
+    </p-card>
+
+  </div>
+
+  <div class="quick-actions">
+    <h3>Acesso Rápido</h3>
+    <div class="actions-grid">
+      <p-button
+        label="Nova Venda (Caixa)"
+        icon="pi pi-shopping-cart"
+        routerLink="/app/caixa"
+        *ngIf="roleUsuario === 'OPERADOR' "></p-button>
+
+      <p-button
+        label="Ver Relatórios"
+        icon="pi pi-chart-line"
+        styleClass="p-button-secondary"
+        routerLink="/app/relatorios"></p-button>
+
+      <p-button
+        label="Novo Produto"
+        icon="pi pi-plus"
+        styleClass="p-button-secondary"
+        routerLink="/app/estoque/novo"
+        *ngIf="roleUsuario === 'ADMIN'"></p-button>
+
+      <p-button
+        label="Novo Usuário"
+        icon="pi pi-user-plus"
+        styleClass="p-button-secondary"
+        routerLink="/app/usuarios/novo"
+        *ngIf="roleUsuario === 'ADMIN'"></p-button>
+    </div>
+  </div>
+
 </div>

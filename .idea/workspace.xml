@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b639f598-68cf-4d77-a17b-3f571a29ac9a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/controller/ProdutoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/controller/ProdutoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/ItemVenda.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/ItemVenda.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Produto.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Produto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Venda.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/model/Venda.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/repository/ProdutoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/repository/ProdutoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/ProdutoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/ProdutoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/VendaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/java/br/com/sigec/service/VendaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-api/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/services/produto.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/services/produto.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/services/usuario.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/services/usuario.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/services/venda.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/services/venda.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/home/home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/produtos/produtos.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/relatorios/relatorios.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/relatorios/relatorios.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.scss" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sigec-ui/src/app/telas/usuarios/usuarios.component.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "LuizBastos98"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/LuizBastos98/sigec-api.git",
+    "accountId": "786f4576-e469-45b1-8cc3-1d47a0a87066"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="35cf7AXJWUTIZeCfzMO8OyU2xGK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.SigecApiApplication.executor": "Run",
+    "git-widget-placeholder": "#1 on feature/inovacao",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\Usuário\\OneDrive\\Documentos\\Faculdade\\sigec-api\\sigec-ui\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="SigecApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="sigec-api" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="br.com.sigec.SigecApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b639f598-68cf-4d77-a17b-3f571a29ac9a" name="Changes" comment="" />
+      <created>1763414111236</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1763414111236</updated>
+      <workItem from="1763414113404" duration="4564000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

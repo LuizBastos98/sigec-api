@@ -3,7 +3,6 @@ package br.com.sigec.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,8 +27,8 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @NotBlank(message = "Senha é obrigatória")
-    @Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
+    // *** ALTERAÇÃO: Removido @NotBlank e @Size daqui ***
+    // A validação será manual no Controller (apenas na criação)
     @Column(nullable = false)
     private String senha;
 

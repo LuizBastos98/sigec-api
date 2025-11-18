@@ -2,16 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-// Imports do PrimeNG
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
-import { TooltipModule } from 'primeng/tooltip'; // (Adicionando Tooltip)
-
-// 1. IMPORTE OS SERVIÇOS
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-// Nosso Service
 import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
@@ -22,7 +18,7 @@ import { UsuarioService } from '../../services/usuario.service';
     TableModule,
     ButtonModule,
     ToolbarModule,
-    TooltipModule // (Adicionando Tooltip)
+    TooltipModule
   ],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
@@ -31,7 +27,6 @@ export class UsuariosComponent implements OnInit {
 
   public usuarios: any[] = [];
 
-  // 2. INJETE OS SERVIÇOS
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
@@ -45,15 +40,10 @@ export class UsuariosComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe(
       (response) => {
         this.usuarios = response;
-        console.log('Usuários carregados:', this.usuarios);
       },
       (error) => {
         console.error('Erro ao carregar usuários:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Falha ao carregar usuários.'
-        });
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar usuários.' });
       }
     );
   }
@@ -66,41 +56,27 @@ export class UsuariosComponent implements OnInit {
     this.router.navigate(['/app/usuarios', id]);
   }
 
-  /**
-   * (NOVO) Lógica de Exclusão com Confirmação
-   */
-  public excluirUsuario(id: number, nome: string): void {
+  // --- MÉTODO ALTERADO ---
+  public alternarStatus(usuario: any): void {
+    const acao = usuario.status === 'ATIVO' ? 'desativar' : 'ativar';
+
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir o usuário "${nome}"? Esta ação não pode ser desfeita.`,
-      header: 'Confirmar Exclusão',
+      message: `Tem certeza que deseja ${acao} o usuário "${usuario.nomeCompleto}"?`,
+      header: 'Confirmar Ação',
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Sim, excluir',
+      acceptLabel: 'Sim',
       rejectLabel: 'Cancelar',
       accept: () => {
-        // Usuário clicou "Sim"
-        this.usuarioService.deletarUsuario(id).subscribe(
+        this.usuarioService.trocarStatus(usuario.id).subscribe(
           () => {
-            // Sucesso!
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Usuário excluído com sucesso!'
-            });
-            // Recarrega a lista
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: `Status alterado com sucesso!` });
             this.carregarUsuarios();
           },
           (error) => {
-            // Erro!
-            console.error('Erro ao excluir usuário:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: 'Falha ao excluir usuário.'
-            });
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao alterar status.' });
           }
         );
       }
-      // Se rejeitar, o pop-up simplesmente fecha.
     });
   }
 }

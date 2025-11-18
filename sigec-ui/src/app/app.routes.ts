@@ -12,8 +12,9 @@ import { EstoqueFormComponent } from './telas/estoque-form/estoque-form.componen
 import { CaixaComponent } from './telas/caixa/caixa.component';
 import { RelatoriosComponent } from './telas/relatorios/relatorios.component';
 
-// 1. IMPORTE O NOSSO "SEGURANÇA" (O GUARDA)
+// Imports dos Guardas
 import { adminGuard } from './guards/admin.guard';
+import { operatorGuard } from './guards/operator.guard'; // 1. IMPORTAR
 
 export const routes: Routes = [
 
@@ -23,55 +24,28 @@ export const routes: Routes = [
     path: 'app',
     component: LayoutPrincipalComponent,
     children: [
-      // --- Rotas Comuns (Admin e Operador) ---
+      // Rotas Comuns
       { path: 'home', component: HomeComponent },
       { path: 'relatorios', component: RelatoriosComponent },
 
-      // --- Rota de Operador ---
-      { path: 'caixa', component: CaixaComponent },
-      // (No futuro, poderíamos criar um 'operadorGuard' para esta)
+      // --- Rota de Operador (PROTEGIDA) ---
+      {
+        path: 'caixa',
+        component: CaixaComponent,
+        canActivate: [operatorGuard] // 2. APLICAR O GUARDA AQUI
+      },
 
       // --- Rotas de ADMIN (PROTEGIDAS) ---
-      // 2. "CONTRATE" O GUARDA em todas as rotas de Admin
-      {
-        path: 'usuarios',
-        component: UsuariosComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'usuarios/novo',
-        component: UsuarioFormComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'usuarios/:id',
-        component: UsuarioFormComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'estoque',
-        component: ProdutosComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'estoque/novo',
-        component: ProdutoFormComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'estoque/movimentar',
-        component: EstoqueFormComponent,
-        canActivate: [adminGuard] // Protegida!
-      },
-      {
-        path: 'estoque/:id',
-        component: ProdutoFormComponent,
-        canActivate: [adminGuard] // Protegida!-cd
-      },
+      { path: 'usuarios', component: UsuariosComponent, canActivate: [adminGuard] },
+      { path: 'usuarios/novo', component: UsuarioFormComponent, canActivate: [adminGuard] },
+      { path: 'usuarios/:id', component: UsuarioFormComponent, canActivate: [adminGuard] },
+      { path: 'estoque', component: ProdutosComponent, canActivate: [adminGuard] },
+      { path: 'estoque/novo', component: ProdutoFormComponent, canActivate: [adminGuard] },
+      { path: 'estoque/movimentar', component: EstoqueFormComponent, canActivate: [adminGuard] },
+      { path: 'estoque/:id', component: ProdutoFormComponent, canActivate: [adminGuard] },
     ]
   },
 
-  // Rotas padrão
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login' } // Rota coringa
+  { path: '**', redirectTo: '/login' }
 ];
