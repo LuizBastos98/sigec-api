@@ -1,17 +1,14 @@
 <div class="admin-page">
 
-  <!-- 1. Barra de Título -->
   <p-toolbar>
     <div class="p-toolbar-group-left">
       <h2>Relatório de Vendas</h2>
     </div>
   </p-toolbar>
 
-  <!-- 2. Box de Filtros -->
   <p-fieldset legend="Filtros da Busca" [toggleable]="true">
     <form [formGroup]="filtroForm" (ngSubmit)="onFiltrar()" class="filtro-form">
 
-      <!-- Linha 1: Datas -->
       <div class="form-field">
         <label for="dataInicial">Data Inicial</label>
         <p-calendar
@@ -29,7 +26,6 @@
           [showIcon]="true" />
       </div>
 
-      <!-- Linha 2: Valores -->
       <div class="form-field">
         <label for="valorMinimo">Valor Mínimo (R$)</label>
         <p-inputNumber
@@ -49,13 +45,8 @@
           locale="pt-BR" />
       </div>
 
-      <!-- Linha 3: Usuário (Operador) -->
       <div class="form-field full-width">
         <label for="usuarioId">Operador (Usuário)</label>
-        <!--
-          *** CORREÇÃO ESTAVA AQUI ***
-          Faltava o ">" no final da tag p-dropdown
-        -->
         <p-dropdown
           id="usuarioId"
           [options]="usuarios"
@@ -66,7 +57,6 @@
         />
       </div>
 
-      <!-- Linha 4: Botões -->
       <div class="filtro-botoes">
         <p-button
           label="Limpar Filtros"
@@ -82,7 +72,6 @@
     </form>
   </p-fieldset>
 
-  <!-- 3. Box de Somatórios (PDF Módulo 2.5) -->
   <div class="somatorios-grid">
     <div class="card-somatorio">
       <span class="label">VALOR TOTAL VENDIDO</span>
@@ -98,7 +87,6 @@
     </div>
   </div>
 
-  <!-- 4. Tabela de Resultados -->
   <div class="card-table">
     <p-table
       [value]="vendas"
@@ -123,7 +111,13 @@
           <td>#{{ venda.id }}</td>
           <td>{{ venda.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ venda.usuarioResponsavel.nomeCompleto }}</td>
-          <td>{{ venda.itens.length }} item(ns)</td>
+
+          <td>
+            <div *ngFor="let item of venda.itens">
+              • {{ item.produto.nome }} (x{{ item.quantidade }})
+            </div>
+          </td>
+
           <td>{{ venda.valorTotal | currency:'BRL' }}</td>
         </tr>
       </ng-template>

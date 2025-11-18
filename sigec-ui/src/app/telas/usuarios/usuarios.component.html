@@ -21,15 +21,21 @@
         <tr>
           <th pSortableColumn="nomeCompleto">Nome <p-sortIcon field="nomeCompleto"/></th>
           <th pSortableColumn="email">E-mail <p-sortIcon field="email"/></th>
+          <th>Status</th>
           <th pSortableColumn="perfil">Perfil <p-sortIcon field="perfil"/></th>
           <th>Ações</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-usuario>
-        <tr>
+        <tr [ngClass]="{'linha-inativa': usuario.status === 'INATIVO'}">
           <td>{{ usuario.nomeCompleto }}</td>
           <td>{{ usuario.email }}</td>
+          <td>
+             <span [class]="'status-badge status-' + usuario.status.toLowerCase()">
+                {{ usuario.status }}
+             </span>
+          </td>
           <td>{{ usuario.perfil }}</td>
           <td>
             <p-button
@@ -40,18 +46,18 @@
               pTooltip="Editar"/>
 
             <p-button
-              icon="pi pi-trash"
-              styleClass="p-button-sm p-button-danger"
+              [icon]="usuario.status === 'ATIVO' ? 'pi pi-ban' : 'pi pi-check-circle'"
+              [styleClass]="usuario.status === 'ATIVO' ? 'p-button-sm p-button-danger' : 'p-button-sm p-button-success'"
               [text]="true"
-              pTooltip="Excluir"
-              (click)="excluirUsuario(usuario.id, usuario.nomeCompleto)" />
+              [pTooltip]="usuario.status === 'ATIVO' ? 'Desativar' : 'Ativar'"
+              (click)="alternarStatus(usuario)" />
           </td>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="4">Nenhum usuário encontrado.</td>
+          <td colspan="5">Nenhum usuário encontrado.</td>
         </tr>
       </ng-template>
 

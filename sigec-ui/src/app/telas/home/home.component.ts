@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin, of } from 'rxjs'; // Importe o 'of' também
+import { forkJoin, of } from 'rxjs'; // Importe o 'of'
+import { catchError } from 'rxjs/operators'; // Importe o 'catchError'
 import { RouterLink } from '@angular/router';
 
 // Módulos PrimeNG
@@ -26,12 +27,14 @@ import { RelatorioService } from '../../services/relatorio.service';
 })
 export class HomeComponent implements OnInit {
 
+  // Variáveis para o Dashboard
   public nomeUsuario: string = '';
   public totalVendas: number = 0;
   public qtdProdutos: number = 0;
   public qtdUsuarios: number = 0;
   public roleUsuario: string = '';
 
+  // Injeções
   private usuarioService = inject(UsuarioService);
   private produtoService = inject(ProdutoService);
   private relatorioService = inject(RelatorioService);
@@ -52,17 +55,17 @@ export class HomeComponent implements OnInit {
 
   private carregarEstatisticas(): void {
     // 1. Define as requisições que TODO MUNDO pode fazer
+    // Usamos o pipe(catchError) para que, se uma falhar, não quebre tudo
     const requisicoes: any = {
-      produtos: this.produtoService.getProdutos(),
-      vendas: this.relatorioService.buscarRelatorio({})
+      produtos: this.produtoService.getProdutos().pipe(catchError(() => of([]))),
+      vendas: this.relatorioService.buscarRelatorio({}).pipe(catchError(() => of([])))
     };
 
     // 2. Se for ADMIN, adiciona a requisição de usuários
-    // (Se for Operador, não pedimos, para não dar erro 403)
     if (this.roleUsuario === 'ADMIN') {
-      requisicoes.usuarios = this.usuarioService.getUsuarios();
+      requisicoes.usuarios = this.usuarioService.getUsuarios().pipe(catchError(() => of([])));
     } else {
-      // Se não for admin, retornamos uma lista vazia "fake" para não quebrar a lógica
+      // Se não for admin, retornamos uma lista vazia "fake"
       requisicoes.usuarios = of([]);
     }
 
@@ -70,15 +73,12 @@ export class HomeComponent implements OnInit {
     forkJoin(requisicoes).subscribe({
       next: (resultado: any) => {
         // Agora é seguro ler os dados
-
-        // Se 'usuarios' existir no resultado, pega o length. Se não, é 0.
         this.qtdUsuarios = resultado.usuarios ? resultado.usuarios.length : 0;
+        this.qtdProdutos = resultado.produtos ? resultado.produtos.length : 0;
 
-        this.qtdProdutos = resultado.produtos.length;
-
-        this.totalVendas = resultado.vendas.reduce((total: number, venda: any) => {
+        this.totalVendas = resultado.vendas ? resultado.vendas.reduce((total: number, venda: any) => {
           return total + (venda.valorTotal || 0);
-        }, 0);
+        }, 0) : 0;
       },
       error: (err) => {
         console.error('Erro ao carregar estatísticas do dashboard', err);
@@ -86,3 +86,4 @@ export class HomeComponent implements OnInit {
     });
   }
 }
+
